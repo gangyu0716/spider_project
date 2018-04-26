@@ -1,6 +1,6 @@
-#修改自知乎专栏 《从零开始写爬虫》https://zhuanlan.zhihu.com/p/26786056
-#该爬虫用于爬取http://dianying.2345.com/top/的最新电影信息和图片
-#时间 2018-4-26
+#修改自知乎专栏《从零开始写爬虫》 https://zhuanlan.zhihu.com/p/26786056
+#用于爬取http://dianying.2345.com/top/电影网站的信息和图片
+#完成时间 2018-4-26
 
 import requests
 import bs4
