@@ -10,9 +10,8 @@ class DemoSpider(scrapy.Spider):
     start_urls = ['http://zimuku.net/']
 
     def parse(self, response):
-        name = response.xpath('//b/text()').extract()[1]
+        moivename = response.xpath('//b/text()').extract()[0]
 
         items = {}
-        items['第一个'] = name
-
+        items['第一个'] = moivename
         return items

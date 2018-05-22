@@ -6,8 +6,6 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 
-class ZimukuPipeline(object):
+class WeatherPipeline(object):
     def process_item(self, item, spider):
-        #print ('1111111111')
-        print (item)
         return item

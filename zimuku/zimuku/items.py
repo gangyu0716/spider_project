@@ -10,8 +10,5 @@ import scrapy
 
 class ZimukuItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    def process_item(self, item, spider):
-        print (item)
-        return item
-    pass
+    name = scrapy.Field()
+    #subname = scrapy.Field()
