@@ -21,8 +21,8 @@ class TianqiSpider(scrapy.Spider):
             weekitem['week'] = day.xpath('./span/text()').extract()[0]
             weekitem['img'] = day.xpath('./img/@src').extract()[0]
 
-        day7 = response.xpath('//ul[@class="txt txt2"]').xpath('./li')
+        day7 = response.xpath('//ul[@class="txt txt2"]')
         for day in day7:
-            weekitem['weather'] = day.xpath('')
+            weekitem['weather'] = day.xpath('./li').extract()[0]
         print (weekitem['img'])
         return weekitem
