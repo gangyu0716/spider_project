@@ -9,6 +9,7 @@ class TianqiSpider(scrapy.Spider):
     start_urls = ['https://www.tianqi.com/nanjing/']
 
     def parse(self, response):
+
         # 解析数据
 
         items = []
@@ -38,3 +39,4 @@ class TianqiSpider(scrapy.Spider):
 
             items.append(weekitem)
         return items
+
