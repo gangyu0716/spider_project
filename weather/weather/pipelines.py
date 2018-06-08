@@ -8,19 +8,21 @@
 
 import os
 import requests
-#import json
-#import codecs
-#import pymysql
+import json
+import codecs
+import pymysql
+
+# process
 
 class WeatherPipeline(object):
     def process_item(self, item, spider):
         # 获取爬虫路径，设置数据保存文件的位置
         base_dir = os.getcwd()
         filename = base_dir + '/data/weather.txt'
-        print (type(item))
-        print (item)
+        # print (type(item))
+        # print (item)
 
-        print (base_dir)
+        # print (base_dir)
         if os.path.exists(base_dir + '/data'):
             print('path exist')
         else:
@@ -34,8 +36,53 @@ class WeatherPipeline(object):
             f.write(item['weather'] + '\n')
             f.write(item['wind'] + '\n')
             f.write(item['temperature'] + '\n')
+            f.write('\r\n')
 
         with open(base_dir + '/data/' + item['date'] + '.png', 'wb') as f:
             f.write(requests.get(item['img']).content)
+
+        return item
+
+
+class W2json(object):
+    def process_item(self,item,spider):
+        base_dir = os.getcwd()
+        filename = base_dir + '/data/weather.json'
+
+        with codecs.open(filename, 'a') as f:
+            line = json.dumps(dict(item), ensure_ascii=False) + '\n'
+            f.write(line)
+
+        return item
+
+class W2mysql(object):
+    def process_item(self,item,spider):
+
+        date = item['date']
+        week = item['week']
+        temperature = item['temperature']
+        weather = item['weather']
+        wind = item['wind']
+        img = item['img']
+
+        connection = pymysql.connect(
+            host='localhost',
+            user='root',
+            password='gy000940',
+            db='scrapyDB',
+            charset='uft8mb4',
+            cursorclass=pymysql.cursors.Dictcursor)
+
+        try:
+            with connection.cursor() as cursor:
+                sql = """INSERT INTO WEATHER(date,week,temperature,weather,wind,img)
+                        VALUES (%s, %s,%s,%s,%s,%s)"""
+                cursor.execute(
+                    sql, (date, week, temperature, weather, wind, img))
+
+            connection.commit()
+
+        finally:
+            connection.close()
 
         return item
