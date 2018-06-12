@@ -70,12 +70,12 @@ class W2mysql(object):
             user='root',
             password='gy000940',
             db='scrapyDB',
-            charset='uft8mb4',
-            cursorclass=pymysql.cursors.Dictcursor)
+            charset='utf8',
+            cursorclass=pymysql.cursors.DictCursor)
 
         try:
             with connection.cursor() as cursor:
-                sql = """INSERT INTO WEATHER(date,week,temperature,weather,wind,img)
+                sql = """INSERT INTO weather(date,week,temperature,weather,wind,img)
                         VALUES (%s, %s,%s,%s,%s,%s)"""
                 cursor.execute(
                     sql, (date, week, temperature, weather, wind, img))
