@@ -41,3 +41,6 @@ class TianqiSpider(scrapy.Spider):
 
         return items
 
+    # items 是一个list，里面存放了7个weather.item
+    # 当items被返回的时候，pipeline回根据list的元素，每个元素调用一个pipeline
+
