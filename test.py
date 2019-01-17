@@ -1,13 +1,21 @@
 from selenium import webdriver
 import re
 import time
+import platform
 from selenium.common.exceptions import StaleElementReferenceException
 
+system_env = platform.uname()
 option = webdriver.ChromeOptions()
 #option.add_argument("headless")
-driver = webdriver.Chrome(r"C:\Users\gy\Desktop\chromedriver.exe", chrome_options=option)
-driver.get('https://www.zhihu.com/billboard')
 
+#for windows env path
+if system_env[0] == 'Windows':
+    driver = webdriver.Chrome(r"C:\Users\gy\Desktop\chromedriver.exe", chrome_options=option)
+#for linux env path
+if system_env[0] == 'Linux':
+    driver = webdriver.Chrome(r"/home/gy/share/nfs/chromedriver", chrome_options=option)
+
+driver.get('https://www.zhihu.com/billboard')
 hot_title = driver.find_elements_by_xpath('//div[@class="HotList-itemTitle"]')
 title_popular = driver.find_elements_by_xpath('//div[@class="HotList-itemMetrics"]')
 
@@ -19,12 +27,13 @@ followers_list = []
 viewers_list = []
 answers_list = []
 
+for i in range(title_num):
 
 for i in range(3):
     hot_title = driver.find_elements_by_xpath('//div[@class="HotList-itemTitle"]')
     try:
         webdriver.ActionChains(driver).move_to_element(hot_title[i]).click(hot_title[i]).perform()
-        titles = driver.find_elements_by_xpath('//h1[@class="QuestionHeader-title"]')[0].text
+        titles = driver.find_elements_by_xpath('//h1[@class="QuestionHeader-title"]')[1].text
         followers = driver.find_elements_by_xpath('//strong[@class="NumberBoard-itemValue"]')[0].text
         viewers = driver.find_elements_by_xpath('//strong[@class="NumberBoard-itemValue"]')[1].text
         answers = driver.find_elements_by_xpath('//h4[@class="List-headerText"]')[0].text
@@ -32,8 +41,6 @@ for i in range(3):
         keywords = ''
         for x in range(len(keyword)):
             keywords = keywords + keyword[x].text + ","
-
-        print (titles + '1')
 
         title_list.append(titles)
         keyword_list.append(keywords)
@@ -50,6 +57,8 @@ print (answers_list)
 print (keyword_list)
 print (followers_list)
 print (viewers_list)
+
+
 # str_test = driver.find_elements_by_xpath(
 #                 '//div[contains(text(), ' + '\"' + '2' + '\")' + ' and @class="HotList-itemIndex HotList-itemIndexHot"]')
 # webdriver.ActionChains(driver).move_to_element(str_test[0]).click(str_test[0]).perform()
