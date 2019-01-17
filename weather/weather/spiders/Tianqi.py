@@ -23,7 +23,7 @@ class TianqiSpider(scrapy.Spider):
         # 从《zxt_shuju》属性中爬取一周的温度数据
         temperature = response.xpath('//div[@class="zxt_shuju"]').xpath('./ul/li')
         # 爬取每天的信息
-        for i in range(6):
+        for i in range(7):
             weekitem = WeatherItem()
             weekitem['date'] = week[i].xpath('./b/text()').extract()[0]
             weekitem['week'] = week[i].xpath('./span/text()').extract()[0]
@@ -38,5 +38,9 @@ class TianqiSpider(scrapy.Spider):
                 temperature[i].xpath('./span/text()').extract()[0]
 
             items.append(weekitem)
+
         return items
+
+    # items 是一个list，里面存放了7个weather.item
+    # 当items被返回的时候，pipeline回根据list的元素，每个元素调用一个pipeline
 
