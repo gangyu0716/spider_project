@@ -3,15 +3,17 @@ import re
 import time
 import platform
 from selenium.common.exceptions import StaleElementReferenceException
+import wordcloud
 
 
-
+#for get zhihu biliboard info
 def GetBiliboardInfo(title_list=[], popular_list=[],
                        keyword_list=[],followers_list=[],
                        viewers_list=[], answers_list=[]):
 
     system_env = platform.uname()
     option = webdriver.ChromeOptions()
+    #如果打开这一项可以实现程序的后台运行
     #option.add_argument("headless")
 
     #for windows env path
@@ -22,16 +24,11 @@ def GetBiliboardInfo(title_list=[], popular_list=[],
         driver = webdriver.Chrome(r"/home/gy/share/nfs/chromedriver", chrome_options=option)
 
     driver.get('https://www.zhihu.com/billboard')
+    #find element of title and popular degree
     hot_title = driver.find_elements_by_xpath('//div[@class="HotList-itemTitle"]')
     title_popular = driver.find_elements_by_xpath('//div[@class="HotList-itemMetrics"]')
 
     title_num = len(hot_title)
-    # title_list = []
-    # popular_list = []
-    # keyword_list = []
-    # followers_list = []
-    # viewers_list = []
-    # answers_list = []
 
     for i in range(title_num):
         popular = re.sub('\D',"",title_popular[i].text)
@@ -56,26 +53,39 @@ def GetBiliboardInfo(title_list=[], popular_list=[],
             viewers_list.append(viewers)
             answers_list.append(answers)
             driver.back()
+        #Error handle
         except StaleElementReferenceException:
             print ("something wrong in " + str(i) + " title\n")
             time.sleep(0.5)
             return title_list, popular_list, keyword_list, followers_list, viewers_list, answers_list
 
-    # print (title_list)
-    # print (answers_list)
-    # print (keyword_list)
-    # print (followers_list)
-    # print (viewers_list)
-    # print (popular_list)
-
+    #return result
     return title_list, popular_list, keyword_list, followers_list, viewers_list, answers_list
 
 
-[title_list , popular_list, keyword_list, followers_list, viewers_list, answers_list]=GetBiliboardInfo()
+#for handle data
+def data_process(viewers_list, keyword_list):
+    font = r'C:\Windows\Fonts\STXINWEI.TTF'
 
-print (title_list)
-print (answers_list)
-print (keyword_list)
-print (followers_list)
-print (viewers_list)
-print (popular_list)
+    cloud_text = "".join(keyword_list)
+    wordtext_fd = open("keyword.txt", "w")
+    wordtext_fd.write(cloud_text)
+    wordtext_fd.close()
+
+    w = wordcloud.WordCloud(font_path=font,width=1400, height=1400, margin=2)
+    w.generate(cloud_text)
+    w.to_file("wordcloud.png")
+
+
+if __name__ == '__main__':
+
+    [title_list , popular_list, keyword_list, followers_list, viewers_list, answers_list]=GetBiliboardInfo()
+
+    print (title_list)
+    print (answers_list)
+    print (keyword_list)
+    print (followers_list)
+    print (viewers_list)
+    print (popular_list)
+
+    data_process(viewers_list,keyword_list)
