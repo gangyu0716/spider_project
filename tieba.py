@@ -1,3 +1,4 @@
+# encoding: utf-8
 import requests
 import time
 from bs4 import BeautifulSoup
@@ -66,4 +67,3 @@ deep = 1
 if __name__ == '__main__':
     main(base_url,deep)
 
-    print (123)
