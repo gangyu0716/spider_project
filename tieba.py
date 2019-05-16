@@ -1,7 +1,9 @@
 # encoding: utf-8
 import requests
+import re
 import time
 from bs4 import BeautifulSoup
+from collections import Counter
 
 def get_html(url):
     try:
@@ -19,7 +21,7 @@ def get_content(url):
     #找到每一个主题贴
     liTags = soup.find_all('li', attrs={'class': ' j_thread_list clearfix'})
 
-    print (liTags)
+    #print (liTags)
     for li in liTags:
         #初始化一个字典用存储
         comment = {}
@@ -37,9 +39,24 @@ def get_content(url):
             comments.append(comment)
         except:
             print ('Some problem happened!')
+
     return comments
 
-def Out2File(dict):
+def keyword_count(dict):
+    weapons = ['单手剑|片手剑','双手剑|双刀|双剑','大剑|重剑' \
+                      '太刀','锤|锤子','狩猎笛|笛子','长枪','铳枪' \
+                      '斩击斧|剑斧','充能斧|盾斧','操虫棍|棍|棍子' \
+                      '弓', '轻弩','重弩']
+    weapons_count = {}
+
+    for weapon in weapons:
+        count = 0;
+        for comment in dict:
+            count = count + len(re.findall(weapon, comment['title']))
+        weapons_count[weapon] = count;
+
+
+def out2file(dict):
     with open('TB.txt','a+') as f:
         for comment in dict:
             f.write('标题： {} \t 链接：{} \t 发帖人：{} \t 发帖时间：{} \t 回复数量： {} \n'.format(
@@ -52,11 +69,11 @@ def main(base_url, deep):
         url_list.append(base_url + '&pn=' + str(i*50))
 
     print ('网页信息已经确认')
-    print (url_list)
+    #print (url_list)
 
     for url in url_list:
         content = get_content(url)
-        Out2File(content)
+        #Out2File(content)
 
     print ('所有网页爬取完毕，已输出至文件中')
 
