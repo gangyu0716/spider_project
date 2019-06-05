@@ -43,9 +43,9 @@ def get_content(url):
     return comments
 
 def keyword_count(dict):
-    weapons = ['单手剑|片手剑','双手剑|双刀|双剑','大剑|重剑' \
-                      '太刀','锤|锤子','狩猎笛|笛子','长枪','铳枪' \
-                      '斩击斧|剑斧','充能斧|盾斧','操虫棍|棍|棍子' \
+    weapons = ['单手剑|片手剑','双手剑|双刀|双剑','大剑|重剑',\
+                      '太刀','锤|锤子','狩猎笛|笛子','长枪','铳枪', \
+                      '斩击斧|剑斧','充能斧|盾斧','操虫棍|棍|棍子', \
                       '弓', '轻弩','重弩']
     weapons_count = {}
 
@@ -53,7 +53,9 @@ def keyword_count(dict):
         count = 0;
         for comment in dict:
             count = count + len(re.findall(weapon, comment['title']))
-        weapons_count[weapon] = count;
+        weapons_count.update({weapon : count})
+
+    print (weapons_count)
 
 
 def out2file(dict):
@@ -73,7 +75,8 @@ def main(base_url, deep):
 
     for url in url_list:
         content = get_content(url)
-        #Out2File(content)
+        keyword_count(content)
+        out2file(content)
 
     print ('所有网页爬取完毕，已输出至文件中')
 
