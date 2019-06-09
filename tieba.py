@@ -59,7 +59,7 @@ def keyword_count(dict):
 
 
 def out2file(dict):
-    with open('TB.txt','a+') as f:
+    with open('TB.txt','a+',encoding='utf-8') as f:
         for comment in dict:
             f.write('标题： {} \t 链接：{} \t 发帖人：{} \t 发帖时间：{} \t 回复数量： {} \n'.format(
                 comment['title'], comment['link'], comment['name'], comment['time'], comment['replyNum']))
